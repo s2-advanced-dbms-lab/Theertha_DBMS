@@ -1,0 +1,89 @@
+PROGRAM NO:6
+
+1.create table sailors(SID int primary key,sname varchar(10),rating float,age int);
+2.insert into sailors values(20,'horatio',9,55);
+3.insert into sailors values(21,'denis',10,40);
+4.insert into sailors values(22,'harley',5.5,50);
+5.insert into sailors values(23,'dain',10,36);
+6.insert into sailors values(24,'jaison',8,58);
+7. select * from sailors;
+
+
++-----+---------+--------+------+
+| SID | sname   | rating | age  |
++-----+---------+--------+------+
+|  20 | horatio |      9 |   55 |
+|  21 | denis   |     10 |   40 |
+|  22 | harley  |    5.5 |   50 |
+|  23 | dain    |     10 |   36 |
+|  24 | jaison  |      8 |   58 |
++-----+---------+--------+------+
+
+
+8.create table boats(BID int primary key,bname varchar(10),bcolor varchar(20));
+9.insert into boats values(101,'island','blue');
+10.insert into boats values(102,'speed','red');
+11.insert into boats values(22,'wind','green');
+12.insert into boats values(23,'marine','white');
+13.select * from boats;
+
++-----+--------+--------+
+| BID | bname  | bcolor |
++-----+--------+--------+
+|  22 | wind   | green  |
+|  23 | marine | white  |
+| 101 | island | blue   |
+| 102 | speed  | red    |
++-----+--------+--------+
+
+14.create table reserves(SID int,BID int,day varchar(10),primary key(SID,BID,day),foreign key(SID) references sallors(SID),foreign key(BID) references boats(BID));
+15.insert into reserves values(22,101,'monday');
+16.insert into reserves values(24,104,'wednesday');
+17.insert into reserves values(23,103,'friday');
+18.insert into reserves values(22,104,'thursday');
+
+
++-----+-----+-----------+
+| SID | BID | day       |
++-----+-----+-----------+
+|  22 | 101 | monday    |
+|  22 | 102 | friday    |
+|  23 | 103 | monday    |
+|  22 | 104 | thursday  |
+|  24 | 104 | wednesday |
++-----+-----+-----------+
+
+
+19.select S.sname from sallors S, reserves R,boats B where S.SID=R.sid and R.BID=B.BID and (B.bcolor='red' or B.bcolor='green');
+
+
++--------+
+| sname  |
++--------+
+| harley |
+| dain   |
++--------+
+
+
+20.select SID,sname from sallors where SID in(select SID from reserves where BID in(select BID from boats where bcolor in('red','green')));
+
+
++-----+--------+
+| SID | sname  |
++-----+--------+
+|  22 | harley |
+|  23 | dain   |
++-----+--------+
+
+
+21.select S.SID from sallors S where S.rating=10 union select R.SID from reserves R where R.BID=104;
++-----+
+| SID |
++-----+
+|  21 |
+|  23 |
+|  22 |
+|  24 |
++-----+
+
+
