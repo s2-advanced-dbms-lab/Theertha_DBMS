@@ -1,0 +1,114 @@
+create table sailors(sid int primary key,sname varchar(10),rating float,age int);
+
+insert into sailors values(20,'Horatio',9,55);
+
+insert into sailors values(21,'Denis',10,40);
+
+insert into sailors values(22,'Harley',5.5,50);
+
+insert into sailors values(23,'Dain',10,36);
+
+insert into sailors values(24,'Jaison',8,58);
+
+select * from sailors;
+
++-----+---------+--------+------+
+| sid | sname   | rating | age  |
++-----+---------+--------+------+
+|  20 | Horatio |      9 |   55 |
+|  21 | Denis   |     10 |   40 |
+|  22 | Harley  |    5.5 |   50 |
+|  23 | Dain    |     10 |   36 |
+|  24 | Jaison  |      8 |   58 |
++-----+---------+--------+------+
+
+create table boats(bid int primary key,bname varchar(10),bcolor varchar(20));
+
+insert into boats values(101,'Island','blue');
+
+insert into boats values(102,'Speed','red');
+
+insert into boats values(103,'wind','green');
+
+insert into boats values(104,'marine','white');
+
+select * from boats;
++-----+--------+--------+
+| bid | bname  | bcolor |
++-----+--------+--------+
+| 101 | Island | blue   |
+| 102 | Speed  | red    |
+| 103 | wind   | green  |
+| 104 | marine | white  |
++-----+--------+--------+
+
+ create table reserves(sid int,bid int,day varchar(10),primary key(sid,bid,day),foreign key(sid) references sailors(sid),foreign key(bid) references boats(bid));
+
+insert into reserves values(22,101,'monday');
+
+insert into reserves values(22,102,'friday');
+
+insert into reserves values(22,103,'monday');
+
+insert into reserves values(23,103,'monday');
+
+insert into reserves values(22,104,'thursday');  
+
+insert into reserves values(24,104,'wednesday');
+
+select * from reserves;
++-----+-----+-----------+
+| sid | bid | day       |
++-----+-----+-----------+
+|  22 | 101 | monday    |
+|  22 | 102 | friday    |
+|  22 | 103 | monday    |
+|  23 | 103 | monday    |
+|  22 | 104 | thursday  |
+|  24 | 104 | wednesday |
++-----+-----+-----------+
+
+select s.sname from sailors s where s.sid not in(select r.sid from reserves r where r.bid in(select b.bid from boats b where b.bcolor='red'));
++---------+
+| sname   |
++---------+
+| Horatio |
+| Denis   |
+| Dain    |
+| Jaison  |
++---------+
+
+select s1.sname from sailors s1 where s1.rating > any(select s2.rating from sailors s2 where s2.sname='Horatio');
++-------+
+| sname |
++-------+
+| Denis |
+| Dain  |
++-------+
+
+select s1.sname from sailors s1 where s1.rating >= all(select s2.rating from sailors s2);
++-------+
+| sname |
++-------+
+| Denis |
+| Dain  |
++-------+
+
+select s.sname, s.age from sailors s where s.age=(select max(s2.age) from sailors s2);
++--------+------+
+| sname  | age  |
++--------+------+
+| Jaison |   58 |
++--------+------+
+
+select s.sname from sailors s where s.age>(select max(s2.age) from sailors s2 where s2.rating=10);
++---------+
+| sname   |
++---------+
+| Horatio |
+| Harley  |
+| Jaison  |
++---------+
+
+
+

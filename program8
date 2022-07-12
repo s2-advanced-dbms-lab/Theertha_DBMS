@@ -1,0 +1,89 @@
+create table emp(eid int not null,ename varchar(20) not null,did int not null, salary int);
+
+insert into emp values(1,"Biju",100,8000);
+
+insert into emp values(8,"Dhiana",104,60000);
+
+insert into emp values(3,"Ansala",102,65000);
+
+insert into emp values(6,"Anu",104,5000);
+
+select * from emp;
++-----+--------+-----+--------+
+| eid | ename  | did | salary |
++-----+--------+-----+--------+
+|   1 | Biju   | 100 |   8000 |
+|   8 | Dhiana | 104 |  60000 |
+|   3 | Ansala | 102 |  65000 |
+|   6 | Anu    | 104 |   5000 |
++-----+--------+-----+--------+
+
+create table dept(did int references emp(did),dname varchar(20) not null);
+
+insert into dept values(100,"Production");
+
+insert into dept values(102,"Sales");
+
+insert into dept values(104,"IT");
+
+select * from dept;
++------+------------+
+| did  | dname      |
++------+------------+
+|  100 | Production |
+|  102 | Sales      |
+|  104 | IT         |
++------+------------+
+
+select count(*) as Number_of_Employees from emp;
++---------------------+
+| Number_of_Employees |
++---------------------+
+|                   4 |
++---------------------+
+
+select did,sum(salary) from emp group by did;
++-----+-------------+
+| did | sum(salary) |
++-----+-------------+
+| 100 |        8000 |
+| 102 |       65000 |
+| 104 |       65000 |
++-----+-------------+
+
+select sum(salary) from emp where did=100;
++-------------+
+| sum(salary) |
++-------------+
+|        8000 |
++-------------+
+
+select did,avg(salary) as Avg_salary from emp group by did;
++-----+------------+
+| did | Avg_salary |
++-----+------------+
+| 100 |  8000.0000 |
+| 102 | 65000.0000 |
+| 104 | 32500.0000 |
++-----+------------+
+
+select did, min(salary) as Min_salary from emp group by did;
++-----+------------+
+| did | Min_salary |
++-----+------------+
+| 100 |       8000 |
+| 102 |      65000 |
+| 104 |       5000 |
++-----+------------+
+
+select did,count(*) as Number_of_Employees from emp group by did;
++-----+---------------------+
+| did | Number_of_Employees |
++-----+---------------------+
+| 100 |                   1 |
+| 102 |                   1 |
+| 104 |                   2 |
++-----+---------------------+
+
+
+
